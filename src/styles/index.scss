@@ -1,0 +1,16 @@
+$primaryBorderColor: #d8d9d7;
+
+.mainContainer {
+  padding: 16px 24px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.textEditor {
+  border: 2px solid $primaryBorderColor;
+  border-radius: 5px;
+  padding: 8px 16px;
+  height: calc(100vh - 250px);
+}
