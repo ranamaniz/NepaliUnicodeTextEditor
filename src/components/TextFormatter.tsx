@@ -1,5 +1,5 @@
-import { Button } from "react-bootstrap";
-import useStore from "../store/store";
+import { Button, Form } from "react-bootstrap";
+import useStore, { Language } from "../store/store";
 
 type Props = {};
 
@@ -22,9 +22,21 @@ const TextFormatter = (props: Props) => {
     }
   };
 
-  console.log(store);
+  const handleLanguageSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedLang = e.currentTarget.value;
+    store.setLanguage(selectedLang as Language);
+  };
+
   return (
     <section className="textEditor__formatter">
+      <Form.Select
+        value={store.language}
+        onChange={handleLanguageSelect}
+        className="textEditor__langSelector"
+      >
+        <option value="nep">Nepali</option>
+        <option value="eng">English</option>
+      </Form.Select>
       <Button
         variant={`${store.bold ? "secondary" : "light"}`}
         onClick={() => handleToggleFormats("bold")}

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { createEditor } from "slate";
 import { Editable, Slate, withReact } from "slate-react";
 
 import { BaseEditor, Descendant } from "slate";
 import { ReactEditor } from "slate-react";
 import { preetiCharMap } from "../constants";
+import useStore from "../store/store";
 
 type CustomElement = { type: "paragraph"; children: CustomText[] };
 type CustomText = { text: string };
@@ -17,71 +18,53 @@ declare module "slate" {
   }
 }
 
-const initialValue: Descendant[] = [
-  {
-    type: "paragraph",
-    children: [{ text: "" }],
-  },
-];
-
 const TextEditor = () => {
-  const [isShiftActive, setIsShiftActive] = useState(false);
-
+  const store = useStore();
   const [editor] = useState(() => withReact(createEditor()));
 
+  const initialValue: Descendant[] = useMemo(
+    () =>
+      JSON.parse(store.texts) || [
+        {
+          type: "paragraph",
+          children: [{ text: "" }],
+        },
+      ],
+    []
+  );
+
   const handlePreetiCharMap = (key: string) => {
-    if (isShiftActive) {
-      const uKey = key.toUpperCase();
-
-      console.log(uKey);
-
-      return key === "Shift" ? "" : preetiCharMap[uKey] || uKey;
-    }
-
-    return key === "Shift" ? "" : preetiCharMap[key] || key;
+    return preetiCharMap[key];
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    console.log("e.key", e.key);
-
-    if (e.shiftKey) {
-      setIsShiftActive(true);
-    }
-
-    const isActionKey =
-      e.ctrlKey ||
-      e.altKey ||
-      e.metaKey ||
-      e.key === " " ||
-      e.key === "Backspace" ||
-      e.key === "Tab";
-
-    if (isActionKey) {
-      return;
-    }
-
-    e.preventDefault();
+    if (store.language !== "nep") return;
 
     const key = e.key;
-
     const preetiText = handlePreetiCharMap(key);
 
-    editor.insertText(preetiText);
+    if (!!preetiText) {
+      e.preventDefault();
+      editor.insertText(preetiText);
+    }
   };
 
-  const handleKeyUp = (e: React.KeyboardEvent) => {
-    if (e.shiftKey) {
-      setIsShiftActive(false);
-    }
+  const handleEditorChange = (value: Descendant[]) => {
+    const content = JSON.stringify(value);
+    console.log("editor.children", editor.children);
+    store.setTexts(content);
   };
 
   return (
-    <Slate editor={editor} initialValue={initialValue}>
+    <Slate
+      editor={editor}
+      initialValue={initialValue}
+      onChange={handleEditorChange}
+    >
       <Editable
         placeholder="Type something..."
         className="textEditor__textarea"
         onKeyDown={(e) => handleKeyDown(e)}
-        onKeyUp={(e) => handleKeyUp(e)}
       />
     </Slate>
   );
