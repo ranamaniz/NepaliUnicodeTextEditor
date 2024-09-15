@@ -49,7 +49,7 @@ const TextFormatter = (props: Props) => {
   return (
     <section className="textEditor__formatter">
       <Form.Select
-        value={store.language}
+        value={store?.language}
         onChange={handleLanguageSelect}
         className="textEditor__langSelector"
       >
@@ -57,19 +57,19 @@ const TextFormatter = (props: Props) => {
         <option value="eng">English</option>
       </Form.Select>
       <Button
-        variant={`${store.bold ? "secondary" : "light"}`}
+        variant={`${store?.bold ? "secondary" : "light"}`}
         onClick={() => handleToggleFormats("bold")}
       >
         <strong>B</strong>
       </Button>
       <Button
-        variant={`${store.italic ? "secondary" : "light"}`}
+        variant={`${store?.italic ? "secondary" : "light"}`}
         onClick={() => handleToggleFormats("italic")}
       >
         <i>I</i>
       </Button>
       <Button
-        variant={`${store.underline ? "secondary" : "light"}`}
+        variant={`${store?.underline ? "secondary" : "light"}`}
         onClick={() => handleToggleFormats("underline")}
       >
         <u>U</u>

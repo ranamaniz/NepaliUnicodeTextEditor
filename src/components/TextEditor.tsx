@@ -30,7 +30,7 @@ const TextEditor = () => {
 
   const initialValue: Descendant[] = useMemo(
     () =>
-      !!store.texts
+      !!store?.texts
         ? JSON.parse(store.texts)
         : [
             {
@@ -55,6 +55,7 @@ const TextEditor = () => {
             fontStyle: leaf.italic ? "italic" : "normal",
             textDecoration: leaf.underline ? "underline" : "none",
           }}
+          data-testid="text-editor-leaf"
         >
           {children}
         </span>
@@ -93,6 +94,7 @@ const TextEditor = () => {
         renderLeaf={renderLeaf}
         className="textEditor__textarea"
         onKeyDown={(e) => handleKeyDown(e)}
+        data-testid="text-editor"
       />
     </Slate>
   );
