@@ -5,12 +5,12 @@ export type Language = "eng" | "nep";
 
 type Store = {
   bold: boolean;
-  italics: boolean;
+  italic: boolean;
   underline: boolean;
   language: Language;
   texts: string;
   toggleBold: () => void;
-  toggleItalics: () => void;
+  toggleItalic: () => void;
   toggleUnderline: () => void;
   setLanguage: (lang: Language) => void;
   setTexts: (newTexts: string) => void;
@@ -20,12 +20,12 @@ const useStore = create<Store>()(
   persist(
     (set, get) => ({
       bold: false,
-      italics: false,
+      italic: false,
       underline: false,
       texts: "",
       language: "nep",
       toggleBold: () => set({ bold: !get().bold }),
-      toggleItalics: () => set({ italics: !get().italics }),
+      toggleItalic: () => set({ italic: !get().italic }),
       toggleUnderline: () => set({ underline: !get().underline }),
       setLanguage: (lang: Language) => set({ language: lang }),
       setTexts: (newtexts: string) => set({ texts: newtexts }),

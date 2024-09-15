@@ -1,18 +1,37 @@
 import { Button, Form } from "react-bootstrap";
+import { Editor } from "slate";
+import { useSlate } from "slate-react";
 import useStore, { Language } from "../store/store";
 
 type Props = {};
 
 const TextFormatter = (props: Props) => {
   const store = useStore();
+  const editor = useSlate();
+
+  const isMarkActive = (format: string) => {
+    const marks = Editor.marks(editor) as Record<string, boolean> | null;
+
+    return marks ? marks[format] === true : false;
+  };
+
+  const toggleMark = (format: string) => {
+    const isActive = isMarkActive(format);
+    if (isActive) {
+      Editor.removeMark(editor, format);
+    } else {
+      Editor.addMark(editor, format, true);
+    }
+  };
 
   const handleToggleFormats = (format: string) => {
+    toggleMark(format);
     switch (format) {
       case "bold":
         store.toggleBold();
         break;
-      case "italics":
-        store.toggleItalics();
+      case "italic":
+        store.toggleItalic();
         break;
       case "underline":
         store.toggleUnderline();
@@ -44,8 +63,8 @@ const TextFormatter = (props: Props) => {
         <strong>B</strong>
       </Button>
       <Button
-        variant={`${store.italics ? "secondary" : "light"}`}
-        onClick={() => handleToggleFormats("italics")}
+        variant={`${store.italic ? "secondary" : "light"}`}
+        onClick={() => handleToggleFormats("italic")}
       >
         <i>I</i>
       </Button>
