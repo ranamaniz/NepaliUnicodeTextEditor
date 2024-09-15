@@ -15,14 +15,15 @@ This is a Nepali Unicode Text Editor built with React and Slate.js. It supports 
 
 1. Clone the repository:
 
-````bash
+   ```bash
    git clone https://github.com/ranamaniz/NepaliUnicodeTextEditor.git
-    ```
+   ```
+
 2. Install dependencies:
 
    ```bash
    npm install
-````
+   ````
 
 ## Running the Application
 
