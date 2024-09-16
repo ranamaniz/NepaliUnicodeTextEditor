@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a Nepali Unicode Text Editor built with React and Slate.js. It supports basic text editing, formatting, and conversion from Preeti to Unicode.
+This is a Nepali Unicode Text Editor built with React and Slate.js. It supports basic text editing, formatting, and conversion from Preeti to Unicode. [Live](https://nepali-unicode-text-editor.vercel.app/)
 
 ## Features
 
