@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { MarkTypes } from "../types";
 
 export type Language = "eng" | "nep";
 
@@ -9,9 +10,7 @@ type Store = {
   underline: boolean;
   language: Language;
   texts: string;
-  toggleBold: () => void;
-  toggleItalic: () => void;
-  toggleUnderline: () => void;
+  toggleFormat: (format: MarkTypes) => void;
   setLanguage: (lang: Language) => void;
   setTexts: (newTexts: string) => void;
 };
@@ -24,9 +23,7 @@ const useStore = create<Store>()(
       underline: false,
       texts: "",
       language: "nep",
-      toggleBold: () => set({ bold: !get().bold }),
-      toggleItalic: () => set({ italic: !get().italic }),
-      toggleUnderline: () => set({ underline: !get().underline }),
+      toggleFormat: (format: MarkTypes) => set({ [format]: !get()[format] }),
       setLanguage: (lang: Language) => set({ language: lang }),
       setTexts: (newtexts: string) => set({ texts: newtexts }),
     }),

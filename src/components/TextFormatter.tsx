@@ -1,46 +1,11 @@
-import { Button, Form } from "react-bootstrap";
-import { Editor } from "slate";
-import { useSlate } from "slate-react";
+import { Form } from "react-bootstrap";
 import useStore, { Language } from "../store/store";
+import MarkButton from "./Button/MarkButton";
 
 type Props = {};
 
 const TextFormatter = (props: Props) => {
   const store = useStore();
-  const editor = useSlate();
-
-  const isMarkActive = (format: string) => {
-    const marks = Editor.marks(editor) as Record<string, boolean> | null;
-
-    return marks ? marks[format] === true : false;
-  };
-
-  const toggleMark = (format: string) => {
-    const isActive = isMarkActive(format);
-   
-    if (isActive) {
-      Editor.removeMark(editor, format);
-    } else {
-      Editor.addMark(editor, format, true);
-    }
-  };
-
-  const handleToggleFormats = (format: string) => {
-    toggleMark(format);
-    switch (format) {
-      case "bold":
-        store.toggleBold();
-        break;
-      case "italic":
-        store.toggleItalic();
-        break;
-      case "underline":
-        store.toggleUnderline();
-        break;
-      default:
-        break;
-    }
-  };
 
   const handleLanguageSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedLang = e.currentTarget.value;
@@ -57,27 +22,16 @@ const TextFormatter = (props: Props) => {
         <option value="nep">Nepali</option>
         <option value="eng">English</option>
       </Form.Select>
-      <Button
-        variant="light"
-        active={!!store?.bold}
-        onClick={() => handleToggleFormats("bold")}
-      >
+      <MarkButton format="bold">
         <strong>B</strong>
-      </Button>
-      <Button
-        variant="light"
-        active={!!store?.italic}
-        onClick={() => handleToggleFormats("italic")}
-      >
+      </MarkButton>
+      <MarkButton format="italic">
         <i>I</i>
-      </Button>
-      <Button
-        variant="light"
-        active={!!store?.underline}
-        onClick={() => handleToggleFormats("underline")}
-      >
+      </MarkButton>
+
+      <MarkButton format="underline">
         <u>U</u>
-      </Button>
+      </MarkButton>
     </section>
   );
 };
