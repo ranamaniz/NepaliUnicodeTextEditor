@@ -17,6 +17,7 @@ const TextFormatter = (props: Props) => {
 
   const toggleMark = (format: string) => {
     const isActive = isMarkActive(format);
+   
     if (isActive) {
       Editor.removeMark(editor, format);
     } else {
@@ -57,19 +58,22 @@ const TextFormatter = (props: Props) => {
         <option value="eng">English</option>
       </Form.Select>
       <Button
-        variant={`${store?.bold ? "secondary" : "light"}`}
+        variant="light"
+        active={!!store?.bold}
         onClick={() => handleToggleFormats("bold")}
       >
         <strong>B</strong>
       </Button>
       <Button
-        variant={`${store?.italic ? "secondary" : "light"}`}
+        variant="light"
+        active={!!store?.italic}
         onClick={() => handleToggleFormats("italic")}
       >
         <i>I</i>
       </Button>
       <Button
-        variant={`${store?.underline ? "secondary" : "light"}`}
+        variant="light"
+        active={!!store?.underline}
         onClick={() => handleToggleFormats("underline")}
       >
         <u>U</u>
