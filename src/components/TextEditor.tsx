@@ -1,14 +1,22 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { createEditor } from "slate";
-import { Editable, RenderLeafProps, Slate, withReact } from "slate-react";
+import {
+  Editable,
+  RenderElementProps,
+  RenderLeafProps,
+  Slate,
+  withReact,
+} from "slate-react";
 
 import { BaseEditor, Descendant } from "slate";
 import { ReactEditor } from "slate-react";
 import { preetiCharMap } from "../constants";
 import useStore from "../store/store";
-import TextFormatter from "./TextFormatter";
+import { BlockTypes } from "../types";
+import Element from "./BlockElement/Element";
+import Toolbar from "./Toolbar";
 
-type CustomElement = { type: "paragraph"; children: CustomText[] };
+type CustomElement = { type: BlockTypes; children: CustomText[] };
 type CustomText = {
   text: string;
   bold?: boolean;
@@ -64,6 +72,11 @@ const TextEditor = () => {
     []
   );
 
+  const renderElement = useCallback(
+    (props: RenderElementProps) => <Element {...props} />,
+    []
+  );
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (store.language !== "nep") return;
 
@@ -88,9 +101,10 @@ const TextEditor = () => {
       initialValue={initialValue}
       onChange={handleEditorChange}
     >
-      <TextFormatter />
+      <Toolbar />
       <Editable
         placeholder="Type something..."
+        renderElement={renderElement}
         renderLeaf={renderLeaf}
         className="textEditor__textarea"
         onKeyDown={(e) => handleKeyDown(e)}

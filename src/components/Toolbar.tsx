@@ -1,6 +1,8 @@
 import { Form } from "react-bootstrap";
 import useStore, { Language } from "../store/store";
 import MarkButton from "./Button/MarkButton";
+import { BsListOl, BsListUl } from "react-icons/bs";
+import BlockButton from "./Button/BlockButton";
 
 type Props = {};
 
@@ -28,10 +30,15 @@ const TextFormatter = (props: Props) => {
       <MarkButton format="italic">
         <i>I</i>
       </MarkButton>
-
       <MarkButton format="underline">
         <u>U</u>
       </MarkButton>
+      <BlockButton type="orderedList">
+        <BsListOl />
+      </BlockButton>
+      <BlockButton type="unorderedList">
+        <BsListUl />
+      </BlockButton>
     </section>
   );
 };
