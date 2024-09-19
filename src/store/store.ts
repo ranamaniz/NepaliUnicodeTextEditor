@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { BlockTypes, MarkTypes } from "../types";
-import OrderedList from "../components/BlockElement/OrderedList";
 
 export type Language = "eng" | "nep";
 

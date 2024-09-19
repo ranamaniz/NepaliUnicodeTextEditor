@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { createEditor } from "slate";
+import { createEditor, Descendant, Editor } from "slate";
 import {
   Editable,
   RenderElementProps,
@@ -8,7 +8,7 @@ import {
   withReact,
 } from "slate-react";
 
-import { BaseEditor, Descendant } from "slate";
+import { BaseEditor } from "slate";
 import { ReactEditor } from "slate-react";
 import { preetiCharMap } from "../constants";
 import useStore from "../store/store";
@@ -32,9 +32,27 @@ declare module "slate" {
   }
 }
 
+const WORD_LIMIT = 50;
+
+function withTextLimit({ limit = WORD_LIMIT } = {}) {
+  return function Plugin(editor: Editor) {
+    const { insertText } = editor;
+
+    editor.insertText = (text) => {
+      if (Editor.string(editor, []).length < limit) {
+        insertText(text);
+      } else {
+        console.warn("limit passed!");
+        alert("limit passed!");
+      }
+    };
+    return editor;
+  };
+}
 const TextEditor = () => {
   const store = useStore();
-  const [editor] = useState(() => withReact(createEditor()));
+  const editor = useMemo(() => withTextLimit()(withReact(createEditor())), []);
+  const [wordCount, setWordCount] = useState(0);
 
   const initialValue: Descendant[] = useMemo(
     () =>
@@ -78,6 +96,11 @@ const TextEditor = () => {
   );
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    setWordCount((prevCount) => ++prevCount);
+    if (wordCount >= WORD_LIMIT - 1 && e.key !== "Backspace") {
+      e.preventDefault();
+      return;
+    }
     if (store.language !== "nep") return;
 
     const key = e.key;
@@ -91,7 +114,6 @@ const TextEditor = () => {
 
   const handleEditorChange = (value: Descendant[]) => {
     const content = JSON.stringify(value);
-
     store.setTexts(content);
   };
 
@@ -109,6 +131,7 @@ const TextEditor = () => {
         className="textEditor__textarea"
         onKeyDown={(e) => handleKeyDown(e)}
         data-testid="text-editor"
+        // onPaste={handlePaste}
       />
     </Slate>
   );

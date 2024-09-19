@@ -1,12 +1,12 @@
-import React from "react";
 import { DefaultElement, RenderElementProps } from "slate-react";
 import OrderedList from "./OrderedList";
 import UnorderedList from "./UnorderedList";
 import ListItem from "./ListItem";
 import { BaseElement } from "slate";
+import { BlockTypes } from "../../types";
 
 interface CustomElement extends BaseElement {
-  type: "orderedList" | "unorderedList" | "listItem" | "paragraph";
+  type: BlockTypes;
 }
 
 const Element = (props: RenderElementProps & { element: CustomElement }) => {

@@ -4,9 +4,7 @@ import MarkButton from "./Button/MarkButton";
 import { BsListOl, BsListUl } from "react-icons/bs";
 import BlockButton from "./Button/BlockButton";
 
-type Props = {};
-
-const TextFormatter = (props: Props) => {
+const Toolbar = () => {
   const store = useStore();
 
   const handleLanguageSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -43,4 +41,4 @@ const TextFormatter = (props: Props) => {
   );
 };
 
-export default TextFormatter;
+export default Toolbar;
