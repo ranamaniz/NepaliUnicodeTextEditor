@@ -9,38 +9,20 @@ import {
 } from "slate-react";
 
 import { isHotkey } from "is-hotkey";
-import { BaseEditor } from "slate";
-import { ReactEditor } from "slate-react";
+import toast from "react-hot-toast";
+import { HOT_KEYS } from "../constants";
 import useStore from "../store/store";
-import { BlockTypes } from "../types";
 import { handlePreetiCharMap } from "../utils/charMapUtils";
-import Element from "./BlockElement/Element";
+import Element from "./Element/Element";
 import Leaf from "./Leaf/Leaf";
 import Toolbar from "./Toolbar";
-import { HOT_KEYS } from "../constants";
-import toast from "react-hot-toast";
+import withHtml from "./HOC/withHTML";
 
-type CustomElement = { type: BlockTypes; children: CustomText[] };
-type CustomText = {
-  text: string;
-  bold?: boolean;
-  italic?: boolean;
-  underline?: boolean;
-};
-
-declare module "slate" {
-  interface CustomTypes {
-    Editor: BaseEditor & ReactEditor;
-    Element: CustomElement;
-    Text: CustomText;
-  }
-}
-
-const CHAR_LIMIT = 50;
+const CHAR_LIMIT = 5000;
 
 const TextEditor = () => {
   const store = useStore();
-  const editor = useMemo(() => withReact(createEditor()), []);
+  const editor = useMemo(() => withHtml(withReact(createEditor())), []);
   const [isCharLimitCrossed, setIsCharLimitCrossed] = useState(false);
 
   const initialValue: Descendant[] = useMemo(
@@ -81,8 +63,6 @@ const TextEditor = () => {
     const totalTextLength = editorTexts.length + (!!chars ? chars.length : 0);
     const isLimitCrossed = totalTextLength > CHAR_LIMIT;
 
-    console.log("getIsCharLimitCrossed totalTextLength", totalTextLength);
-
     if (isLimitCrossed && !isCharLimitCrossed && updateState) {
       setIsCharLimitCrossed(true);
     } else if (!isLimitCrossed && isCharLimitCrossed && updateState) {
@@ -110,8 +90,6 @@ const TextEditor = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    console.log("isCharLimitCrossed", isCharLimitCrossed);
-
     const isHotkeyPress = isHotkey(HOT_KEYS, e);
 
     const isLimitCrossed = getIsCharLimitCrossed({

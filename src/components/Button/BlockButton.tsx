@@ -3,9 +3,9 @@ import { Button } from "react-bootstrap";
 import { Editor, Transforms, Element as SlateElement } from "slate";
 import { useSlate } from "slate-react";
 import useStore from "../../store/store";
-import { BlockTypes } from "../../types";
+import { StoreBlockTypes } from "../../types/types";
 
-type BlockButtonProps = { children: React.ReactNode; type: BlockTypes };
+type BlockButtonProps = { children: React.ReactNode; type: StoreBlockTypes };
 
 const LIST_TYPES = ["orderedList", "unorderedList"];
 
@@ -13,7 +13,7 @@ const BlockButton = ({ children, type }: BlockButtonProps) => {
   const store = useStore();
   const editor = useSlate();
 
-  const isBlockActive = (type: BlockTypes) => {
+  const isBlockActive = (type: StoreBlockTypes) => {
     const { selection } = editor;
     if (!selection) return false;
 
@@ -30,7 +30,7 @@ const BlockButton = ({ children, type }: BlockButtonProps) => {
     return !!match;
   };
 
-  const handleToggleBlock = (type: BlockTypes) => {
+  const handleToggleBlock = (type: StoreBlockTypes) => {
     store.toggleBlock(type);
 
     const isActive = isBlockActive(type);

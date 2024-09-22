@@ -1,24 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { BlockTypes, MarkTypes } from "../types";
-
-export type Language = "eng" | "nep";
-
-type Store = {
-  bold: boolean;
-  italic: boolean;
-  underline: boolean;
-  orderedList: boolean;
-  unorderedList: boolean;
-  listItem: boolean;
-  paragraph: boolean;
-  language: Language;
-  texts: string;
-  toggleFormat: (format: MarkTypes) => void;
-  toggleBlock: (type: BlockTypes) => void;
-  setLanguage: (lang: Language) => void;
-  setTexts: (newTexts: string) => void;
-};
+import { Language, MarkTypes, Store, StoreBlockTypes } from "../types/types";
 
 const useStore = create<Store>()(
   persist(
@@ -33,7 +15,7 @@ const useStore = create<Store>()(
       texts: "",
       language: "nep",
       toggleFormat: (format: MarkTypes) => set({ [format]: !get()[format] }),
-      toggleBlock: (type: BlockTypes) => {
+      toggleBlock: (type: StoreBlockTypes) => {
         const isOrderedList = type === "orderedList";
         const isUnorderedList = type === "unorderedList";
 

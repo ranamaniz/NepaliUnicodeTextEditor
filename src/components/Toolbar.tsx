@@ -1,8 +1,9 @@
 import { Form } from "react-bootstrap";
-import useStore, { Language } from "../store/store";
+import useStore from "../store/store";
 import MarkButton from "./Button/MarkButton";
 import { BsListOl, BsListUl } from "react-icons/bs";
 import BlockButton from "./Button/BlockButton";
+import { Language } from "../types/types";
 
 const Toolbar = () => {
   const store = useStore();

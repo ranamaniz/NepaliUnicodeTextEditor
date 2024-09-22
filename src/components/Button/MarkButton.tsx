@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import { Editor } from "slate";
 import { useSlate } from "slate-react";
 import useStore from "../../store/store";
-import { MarkTypes } from "../../types";
+import { MarkTypes } from "../../types/types";
 
 type MarkButtonProps = { children: React.ReactNode; format: MarkTypes };
 
