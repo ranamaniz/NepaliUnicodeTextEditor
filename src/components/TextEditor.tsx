@@ -111,13 +111,16 @@ const TextEditor = () => {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     console.log("isCharLimitCrossed", isCharLimitCrossed);
-    // console.log("getIsCharLimitCrossed({})", getIsCharLimitCrossed({}));
 
-    if (isHotkey(HOT_KEYS, e)) {
+    const isHotkeyPress = isHotkey(HOT_KEYS, e);
+
+    const isLimitCrossed = getIsCharLimitCrossed({
+      chars: isHotkeyPress ? "" : e.key,
+    });
+
+    if (isHotkeyPress) {
       return;
     }
-    
-    const isLimitCrossed = getIsCharLimitCrossed({ chars: e.key });
 
     if (isLimitCrossed) {
       console.warn("TEXT LIMIT CROSSED");
