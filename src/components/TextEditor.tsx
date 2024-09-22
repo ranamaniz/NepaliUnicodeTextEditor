@@ -15,6 +15,7 @@ import useStore from "../store/store";
 import { BlockTypes } from "../types";
 import Element from "./BlockElement/Element";
 import Toolbar from "./Toolbar";
+import Leaf from "./Leaf/Leaf";
 
 type CustomElement = { type: BlockTypes; children: CustomText[] };
 type CustomText = {
@@ -57,21 +58,7 @@ const TextEditor = () => {
   };
 
   const renderLeaf = useCallback(
-    ({ attributes, children, leaf }: RenderLeafProps) => {
-      return (
-        <span
-          {...attributes}
-          style={{
-            fontWeight: leaf.bold ? "bold" : "normal",
-            fontStyle: leaf.italic ? "italic" : "normal",
-            textDecoration: leaf.underline ? "underline" : "none",
-          }}
-          data-testid="text-editor-leaf"
-        >
-          {children}
-        </span>
-      );
-    },
+    (props: RenderLeafProps) => <Leaf {...props} />,
     []
   );
 
@@ -106,7 +93,7 @@ const TextEditor = () => {
     } else if (e.key === "Backspace" || e.key === "Delete") {
       return;
     }
-    console.log("store.language", store.language);
+
     if (store.language !== "nep") return;
 
     const key = e.key;
