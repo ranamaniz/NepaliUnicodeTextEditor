@@ -17,6 +17,7 @@ import Element from "./Element/Element";
 import Leaf from "./Leaf/Leaf";
 import Toolbar from "./Toolbar";
 import withHtml from "./HOC/withHTML";
+import Export from "./Export";
 
 const CHAR_LIMIT = 5000;
 
@@ -140,6 +141,7 @@ const TextEditor = () => {
         data-testid="text-editor"
         onPaste={handlePaste}
       />
+      <Export />
     </Slate>
   );
 };

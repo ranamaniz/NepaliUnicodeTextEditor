@@ -1,10 +1,8 @@
-import { Descendant, Editor, Transforms } from "slate";
+import { Editor, Transforms } from "slate";
 import { jsx } from "slate-hyperscript";
-import { CustomElement } from "../../types/types";
 import { ELEMENT_TAGS, TEXT_TAGS } from "../../utils/charMapUtils";
 
 type CustomNode = HTMLElement | ChildNode;
-
 // type CustomChildren =
 //   | (Descendant | string | CustomElement)
 //   | (Descendant | string | CustomElement)[]
