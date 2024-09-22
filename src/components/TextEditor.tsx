@@ -16,6 +16,7 @@ import { BlockTypes } from "../types";
 import Element from "./BlockElement/Element";
 import Toolbar from "./Toolbar";
 import Leaf from "./Leaf/Leaf";
+import { handlePreetiCharMap } from "../utils/charMapUtils";
 
 type CustomElement = { type: BlockTypes; children: CustomText[] };
 type CustomText = {
@@ -52,10 +53,6 @@ const TextEditor = () => {
           ],
     []
   );
-
-  const handlePreetiCharMap = (key: string) => {
-    return preetiCharMap[key];
-  };
 
   const renderLeaf = useCallback(
     (props: RenderLeafProps) => <Leaf {...props} />,
@@ -118,7 +115,7 @@ const TextEditor = () => {
     const content = JSON.stringify(value);
     store.setTexts(content);
   };
-  console.log("isOverTextLimit", isOverTextLimit);
+
   return (
     <Slate
       editor={editor}
