@@ -136,3 +136,25 @@ export const preetiCharMap: { [key: string]: string } = {
   ç: "ॐ",
   "÷": "/",
 };
+
+export const HOT_KEYS = [
+  "mod+a",
+  "mod+c",
+  "mod+v",
+  "mod+x",
+  "mod+z",
+  "mod+y",
+  "Backspace",
+  "Enter",
+  "Tab",
+  "Shift",
+  "Control",
+  "Alt",
+  "Escape",
+  "ArrowUp",
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+  "Delete",
+  "Space",
+];

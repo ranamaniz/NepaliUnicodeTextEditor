@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { createEditor, Descendant, Editor, Node } from "slate";
+import { createEditor, Descendant, Node } from "slate";
 import {
   Editable,
   RenderElementProps,
@@ -8,15 +8,17 @@ import {
   withReact,
 } from "slate-react";
 
+import { isHotkey } from "is-hotkey";
 import { BaseEditor } from "slate";
 import { ReactEditor } from "slate-react";
-import { preetiCharMap } from "../constants";
 import useStore from "../store/store";
 import { BlockTypes } from "../types";
-import Element from "./BlockElement/Element";
-import Toolbar from "./Toolbar";
-import Leaf from "./Leaf/Leaf";
 import { handlePreetiCharMap } from "../utils/charMapUtils";
+import Element from "./BlockElement/Element";
+import Leaf from "./Leaf/Leaf";
+import Toolbar from "./Toolbar";
+import { HOT_KEYS } from "../constants";
+import toast from "react-hot-toast";
 
 type CustomElement = { type: BlockTypes; children: CustomText[] };
 type CustomText = {
@@ -34,12 +36,12 @@ declare module "slate" {
   }
 }
 
-const TEXT_LIMIT = 50;
+const CHAR_LIMIT = 50;
 
 const TextEditor = () => {
   const store = useStore();
   const editor = useMemo(() => withReact(createEditor()), []);
-  const [isOverTextLimit, setIsOverTextLimit] = useState(false);
+  const [isCharLimitCrossed, setIsCharLimitCrossed] = useState(false);
 
   const initialValue: Descendant[] = useMemo(
     () =>
@@ -68,26 +70,59 @@ const TextEditor = () => {
     return nodes.map((node) => Node.string(node)).join("");
   };
 
-  const handlePaste = (e: React.ClipboardEvent) => {
+  const getIsCharLimitCrossed = ({
+    chars = "",
+    updateState = true,
+  }: {
+    chars?: string;
+    updateState?: boolean;
+  } = {}) => {
     const editorTexts = getTextsFromEditor(editor.children);
-    const pastedTexts = e.clipboardData.getData("Text");
-    const totalTextLength = editorTexts.length + pastedTexts.length;
+    const totalTextLength = editorTexts.length + (!!chars ? chars.length : 0);
+    const isLimitCrossed = totalTextLength > CHAR_LIMIT;
 
-    if (totalTextLength >= TEXT_LIMIT || isOverTextLimit) {
+    console.log("getIsCharLimitCrossed totalTextLength", totalTextLength);
+
+    if (isLimitCrossed && !isCharLimitCrossed && updateState) {
+      setIsCharLimitCrossed(true);
+    } else if (!isLimitCrossed && isCharLimitCrossed && updateState) {
+      setIsCharLimitCrossed(false);
+    }
+
+    return isLimitCrossed;
+  };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    const chars = e.clipboardData.getData("Text");
+
+    if (
+      isCharLimitCrossed ||
+      getIsCharLimitCrossed({
+        chars,
+        updateState: false,
+      })
+    ) {
       e.preventDefault();
       console.warn("TEXT LIMIT CROSSED");
-      alert("Can't paste, text limit will exceed");
+      toast.error("Can't paste, text limit will exceed", { id: "pasteToast" });
       return;
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (isOverTextLimit && e.key !== "Backspace" && e.key !== "Delete") {
-      console.warn("TEXT LIMIT CROSSED");
-      alert("Limit crossed");
-      e.preventDefault();
+    console.log("isCharLimitCrossed", isCharLimitCrossed);
+    // console.log("getIsCharLimitCrossed({})", getIsCharLimitCrossed({}));
+
+    if (isHotkey(HOT_KEYS, e)) {
       return;
-    } else if (e.key === "Backspace" || e.key === "Delete") {
+    }
+    
+    const isLimitCrossed = getIsCharLimitCrossed({ chars: e.key });
+
+    if (isLimitCrossed) {
+      console.warn("TEXT LIMIT CROSSED");
+      e.preventDefault();
+      toast.error("Character limit exceeded", { id: "keyDownToast" });
       return;
     }
 
@@ -102,18 +137,10 @@ const TextEditor = () => {
   };
 
   const handleEditorChange = (value: Descendant[]) => {
-    const textsOnly = getTextsFromEditor(value);
-    if (textsOnly.length >= TEXT_LIMIT) {
-      console.warn("TEXT LIMIT CROSSED");
-      setIsOverTextLimit(true);
-      return;
-    } else if (isOverTextLimit && textsOnly.length < TEXT_LIMIT) {
-      setIsOverTextLimit(false);
-      return;
+    if (!isCharLimitCrossed) {
+      const content = JSON.stringify(value);
+      store.setTexts(content);
     }
-
-    const content = JSON.stringify(value);
-    store.setTexts(content);
   };
 
   return (

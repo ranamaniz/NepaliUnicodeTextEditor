@@ -2,6 +2,7 @@ import { Button } from "react-bootstrap";
 import TextEditor from "./components/TextEditor";
 import useStore from "./store/store";
 import "./styles/index.scss";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const store = useStore();
@@ -22,6 +23,7 @@ function App() {
           Export Data
         </Button>
       </section>
+      <Toaster />
     </section>
   );
 }
