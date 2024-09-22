@@ -13,9 +13,12 @@ function App() {
     <section className="mainContainer">
       <h1 className="text-center ">Nepali Unicode Text Editor</h1>
       <section className="textEditor">
-       
         <TextEditor />
-        <Button variant="primary" className="mt-2 float-end" onClick={handleExportData}>
+        <Button
+          variant="primary"
+          className="mt-2 float-end"
+          onClick={handleExportData}
+        >
           Export Data
         </Button>
       </section>
