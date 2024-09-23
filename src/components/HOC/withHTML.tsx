@@ -1,6 +1,7 @@
 import { Editor, Transforms } from "slate";
 import { jsx } from "slate-hyperscript";
 import { ELEMENT_TAGS, TEXT_TAGS } from "../../utils/charMapUtils";
+import { parse } from "path";
 
 type CustomNode = HTMLElement | ChildNode;
 // type CustomChildren =
@@ -8,7 +9,7 @@ type CustomNode = HTMLElement | ChildNode;
 //   | (Descendant | string | CustomElement)[]
 //   | null;
 
-const deserialize = (el: CustomNode): any => {
+export const deserialize = (el: any): any => {
   if (el.nodeType === 3) {
     return el.textContent;
   } else if (el.nodeType !== 1) {
@@ -54,10 +55,17 @@ const withHtml = (editor: Editor) => {
   const { insertData } = editor;
 
   editor.insertData = (data) => {
+    console.log("data", data);
     const html = data.getData("text/html");
+    const plainText = data.getData("text/plain");
 
-    if (html) {
-      const parsed = new DOMParser().parseFromString(html, "text/html");
+    const containsHtmlTags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/i.test(plainText);
+
+    if (html || containsHtmlTags) {
+      const parsed = new DOMParser().parseFromString(
+        containsHtmlTags && !html ? plainText : html,
+        "text/html"
+      );
       const fragment = deserialize(parsed.body);
       Transforms.insertFragment(editor, fragment);
       return;

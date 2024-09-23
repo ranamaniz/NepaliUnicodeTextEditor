@@ -75,7 +75,7 @@ const TextEditor = () => {
 
   const handlePaste = (e: React.ClipboardEvent) => {
     const chars = e.clipboardData.getData("Text");
-
+    console.log("chars", chars);
     if (
       isCharLimitCrossed ||
       getIsCharLimitCrossed({
