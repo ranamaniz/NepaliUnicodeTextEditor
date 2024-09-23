@@ -1,7 +1,6 @@
 import { Editor, Transforms } from "slate";
 import { jsx } from "slate-hyperscript";
 import { ELEMENT_TAGS, TEXT_TAGS } from "../../utils/charMapUtils";
-import { parse } from "path";
 
 type CustomNode = HTMLElement | ChildNode;
 // type CustomChildren =
@@ -9,7 +8,7 @@ type CustomNode = HTMLElement | ChildNode;
 //   | (Descendant | string | CustomElement)[]
 //   | null;
 
-export const deserialize = (el: any): any => {
+export const deserialize = (el: CustomNode): any => {
   if (el.nodeType === 3) {
     return el.textContent;
   } else if (el.nodeType !== 1) {
